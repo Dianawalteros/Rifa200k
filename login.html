@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Rifa Arenero</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔐 Admin Login</h1>
+            <p>Rifa Arenero para Michis</p>
+        </div>
+        
+        <div id="error-message" class="error-message"></div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input type="text" id="username" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="btn-login" id="btn-login">Ingresar</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="index.html">← Volver al inicio</a>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const btnLogin = document.getElementById('btn-login');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            btnLogin.disabled = true;
+            btnLogin.textContent = 'Ingresando...';
+            errorMessage.classList.remove('show');
+            
+            try {
+                const resp = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await resp.json();
+                
+                if (!resp.ok) {
+                    throw new Error(data.error || 'Error de autenticación');
+                }
+                
+                // Guardar token
+                localStorage.setItem('adminToken', data.token);
+                
+                // Redirigir al admin
+                window.location.href = 'admin.html';
+                
+            } catch (err) {
+                errorMessage.textContent = err.message;
+                errorMessage.classList.add('show');
+                btnLogin.disabled = false;
+                btnLogin.textContent = 'Ingresar';
+            }
+        });
+
+        // Si ya hay token, redirigir directamente
+        if (localStorage.getItem('adminToken')) {
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+</html>

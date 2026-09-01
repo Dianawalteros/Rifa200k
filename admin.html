@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Rifa Arenero</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .admin-header h1 {
+            color: #333;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            margin-right: 0.3rem;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+        }
+        .toast.show {
+            display: block;
+        }
+        .toast.success {
+            background: #28a745;
+        }
+        .toast.error {
+            background: #dc3545;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .modal-content img {
+            max-width: 100%;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🐾 Admin - Rifa Arenero</h1>
+            <div class="admin-actions">
+                <button class="btn btn-primary" onclick="cargarRegistros()">🔄 Recargar</button>
+                <button class="btn btn-danger" onclick="reiniciarRifa()">🗑 Reiniciar</button>
+                <button class="btn btn-danger" onclick="logout()">🚪 Salir</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-total">0</div>
+                <div class="stat-label">Total Registrados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-pagados">0</div>
+                <div class="stat-label">Pagados ✓</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-pendientes">0</div>
+                <div class="stat-label">Pendientes </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-recaudado">$0</div>
+                <div class="stat-label">Recaudado</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Comprobante</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    <tr><td colspan="8" style="text-align:center;padding:2rem;">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Comprobante -->
+    <div id="modal-comprobante" class="modal">
+        <div class="modal-content">
+            <h3>Comprobante de Pago</h3>
+            <img id="img-comprobante" src="" alt="Comprobante">
+            <p id="info-comprobante"></p>
+            <button class="btn btn-primary" onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const API_URL = "/api/registros";
+        const PRECIO_BOLETA = 10000;
+        let registros = {};
+
+        // Verificar autenticación al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+            cargarRegistros();
+        });
+
+        async function cargarRegistros() {
+            const token = localStorage.getItem('adminToken');
+            
+            try {
+                const resp = await fetch(API_URL, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (resp.status === 401 || resp.status === 403) {
+                    localStorage.removeItem('adminToken');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                if (!resp.ok) throw new Error('Error del servidor');
+                
+                registros = await resp.json();
+                actualizarTabla();
+                actualizarStats();
+            } catch (err) {
+                console.error(err);
+                showToast('Error al cargar datos', 'error');
+            }
+        }
+
+        function actualizarTabla() {
+            const tbody = document.getElementById('tabla-body');
+            const lista = Object.entries(registros);
+            
+            if (lista.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;">Sin registros</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = lista.map(([numero, datos]) => {
+                const estado = datos.pagado ? 
+                    '<span class="badge badge-success">✓ Pagado</span>' : 
+                    '<span class="badge badge-warning">⏳ Pendiente</span>';
+                
+                const btnComprobante = datos.comprobante ? 
+                    `<button class="btn btn-primary btn-small" onclick="verComprobante(${numero})">👁 Ver</button>` : 
+                    '<span style="color:#999">Sin comprobante</span>';
+                
+                const btnAcciones = datos.pagado ? 
+                    `<button class="btn btn-danger btn-small" onclick="eliminarRegistro(${numero})">🗑</button>` :
+                    (datos.comprobante ? 
+                        `<button class="btn btn-success btn-small" onclick="aprobarPago(${numero})">✓ Aprobar</button>` : 
+                        '');
+                
+                return `
+                    <tr>
+                        <td><strong>${String(numero).padStart(2, '0')}</strong></td>
+                        <td>${datos.nombre}</td>
+                        <td>${datos.telefono}</td>
+                        <td>${datos.email || '-'}</td>
+                        <td>${btnComprobante}</td>
+                        <td>${estado}</td>
+                        <td>${new Date(datos.fecha).toLocaleString()}</td>
+                        <td>${btnAcciones}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function actualizarStats() {
+            const total = Object.keys(registros).length;
+            const pagados = Object.values(registros).filter(r => r.pagado).length;
+            const pendientes = total - pagados;
+            const recaudado = pagados * PRECIO_BOLETA;
+            
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-pagados').textContent = pagados;
+            document.getElementById('stat-pendientes').textContent = pendientes;
+            document.getElementById('stat-recaudado').textContent = '$' + recaudado.toLocaleString();
+        }
+
+        function verComprobante(numero) {
+            const datos = registros[numero];
+            if (!datos || !datos.comprobante) return;
+            
+            document.getElementById('img-comprobante').src = datos.comprobante;
+            document.getElementById('info-comprobante').innerHTML = `
+                <strong>Número:</strong> ${String(numero).padStart(2, '0')}<br>
+                <strong>Nombre:</strong> ${datos.nombre}<br>
+                <strong>Teléfono:</strong> ${datos.telefono}<br>
+                <strong>Fecha:</strong> ${new Date(datos.fecha).toLocaleString()}
+            `;
+            document.getElementById('modal-comprobante').classList.add('show');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-comprobante').classList.remove('show');
+        }
+
+        async function aprobarPago(numero) {
+            if (!confirm(`¿Aprobar pago del número ${String(numero).padStart(2, '0')}?`)) return;
+            
+            const token = localStorage.getItem('adminToken');
+            
+            try {
+                const resp = await fetch(`${API_URL}/${numero}/aprobar`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!resp.ok) throw new Error('Error al aprobar');
+                
+                showToast(`Pago del #${String(numero).padStart(2, '0')} aprobado`, 'success');
+                await cargarRegistros();
+            } catch (err) {
+                console.error(err);
+                showToast('Error al aprobar pago', 'error');
+            }
+        }
+
+        async function eliminarRegistro(numero) {
+            if (!confirm(`¿Eliminar el registro del número ${String(numero).padStart(2, '0')}?`)) return;
+            
+            const token = localStorage.getItem('adminToken');
+            
+            try {
+                const resp = await fetch(`${API_URL}/${numero}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!resp.ok) throw new Error('Error al eliminar');
+                
+                showToast(`Registro #${String(numero).padStart(2, '0')} eliminado`, 'success');
+                await cargarRegistros();
+            } catch (err) {
+                console.error(err);
+                showToast('Error al eliminar', 'error');
+            }
+        }
+
+        async function reiniciarRifa() {
+            if (!confirm('⚠️ ¿ESTÁS SEGURO DE REINICIAR TODA LA RIFA?\n\nEsto eliminará TODOS los registros.')) return;
+            if (!confirm(' ÚLTIMA ADVERTENCIA:\n\n¿Realmente quieres borrar todos los datos?')) return;
+            
+            const token = localStorage.getItem('adminToken');
+            
+            try {
+                const resp = await fetch('/api/reiniciar', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!resp.ok) throw new Error('Error al reiniciar');
+                
+                showToast('🎉 Rifa reiniciada desde cero', 'success');
+                await cargarRegistros();
+            } catch (err) {
+                console.error(err);
+                showToast('Error al reiniciar la rifa', 'error');
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Cerrar sesión?')) {
+                localStorage.removeItem('adminToken');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function showToast(mensaje, tipo = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensaje;
+            toast.className = `toast show ${tipo}`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modal-comprobante').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-comprobante') cerrarModal();
+        });
+    </script>
+</body>
+</html>
