@@ -1,7 +1,7 @@
 {
   "name": "rifa200k",
   "version": "1.0.0",
-  "description": "Rifa del tesoro pirata",
+  "description": "Rifa de $200.000 - Tesoro Pirata",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -14,11 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "sqlite3": "^9.4.3",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.3"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"
