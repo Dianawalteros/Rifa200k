@@ -4,6 +4,7 @@
    ============================================================ */
 const API_URL = "/api/registros";
 const TOTAL = 99;
+const POLL_INTERVAL_MS = 4000;
 const PRECIO = 10000;
 
 // DOM
