@@ -1,113 +1,94 @@
 const express = require('express');
 const cors = require('cors');
-const Database = require('better-sqlite3');
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 
-// Base de datos SQLite
-const db = new Database('rifa.db');
+const DB_FILE = path.join(__dirname, 'rifa-data.json');
 
-// Crear tabla si no existe
-db.exec(`
-  CREATE TABLE IF NOT EXISTS registros (
-    numero INTEGER PRIMARY KEY,
-    nombre TEXT NOT NULL,
-    telefono TEXT NOT NULL,
-    email TEXT,
-    fecha TEXT DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+function cargarDatos() {
+  try {
+    if (fs.existsSync(DB_FILE)) {
+      return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    }
+  } catch (err) {
+    console.error('Error cargando datos:', err);
+  }
+  return {};
+}
 
-// API: Obtener todos los registros
+function guardarDatos(datos) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(datos, null, 2));
+}
+
 app.get('/api/registros', (req, res) => {
-  try {
-    const registros = db.prepare('SELECT * FROM registros').all();
-    const formato = {};
-    registros.forEach(r => {
-      formato[r.numero] = {
-        nombre: r.nombre,
-        telefono: r.telefono,
-        email: r.email,
-        fecha: r.fecha
-      };
-    });
-    res.json(formato);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(cargarDatos());
 });
 
-// API: Apartar un número
 app.post('/api/registros/:numero', (req, res) => {
-  const numero = parseInt(req.params.numero);
-  const { nombre, telefono, email } = req.body;
-
-  if (!nombre || !telefono) {
-    return res.status(400).json({ error: 'Nombre y teléfono son obligatorios' });
-  }
-
-  try {
-    // Verificar si ya está tomado
-    const existe = db.prepare('SELECT * FROM registros WHERE numero = ?').get(numero);
-    if (existe) {
-      return res.status(409).json({ error: 'Número ya apartado' });
-    }
-
-    // Insertar registro
-    db.prepare(`
-      INSERT INTO registros (numero, nombre, telefono, email)
-      VALUES (?, ?, ?, ?)
-    `).run(numero, nombre, telefono, email || null);
-
-    res.json({ success: true, numero, nombre });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// API: Eliminar registro (para admin)
-app.delete('/api/registros/:numero', (req, res) => {
-  const numero = parseInt(req.params.numero);
+  const numero = req.params.numero;
+  const datos = cargarDatos();
   
-  try {
-    db.prepare('DELETE FROM registros WHERE numero = ?').run(numero);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  if (datos[numero]) {
+    return res.status(409).json({ error: 'Número ya apartado' });
   }
+  
+  datos[numero] = {
+    nombre: req.body.nombre || '',
+    telefono: req.body.telefono || '',
+    email: req.body.email || null,
+    fecha: new Date().toISOString(),
+    pagado: false,
+    comprobante: null
+  };
+  
+  guardarDatos(datos);
+  console.log(`✅ Número ${numero} apartado`);
+  res.json({ success: true });
 });
-// ENDPOINT PARA REINICIAR TODA LA RIFA
-app.post('/api/reiniciar', (req, res) => {
-  try {
-    db.exec('DELETE FROM registros');
-    console.log('🗑 Rifa reiniciada - Todos los registros eliminados');
-    res.json({ success: true, message: 'Rifa reiniciada correctamente' });
-  } catch (err) {
-    console.error('Error al reiniciar:', err);
-    res.status(500).json({ error: 'Error al reiniciar la rifa' });
+
+app.post('/api/registros/:numero/comprobante', (req, res) => {
+  const numero = req.params.numero;
+  const datos = cargarDatos();
+  if (datos[numero]) {
+    datos[numero].comprobante = req.body.comprobante;
+    datos[numero].fechaPago = new Date().toISOString();
+    guardarDatos(datos);
   }
+  res.json({ success: true });
 });
-// DELETE: Eliminar un registro individual
+
+app.post('/api/registros/:numero/aprobar', (req, res) => {
+  const numero = req.params.numero;
+  const datos = cargarDatos();
+  if (datos[numero]) {
+    datos[numero].pagado = true;
+    datos[numero].fechaAprobacion = new Date().toISOString();
+    guardarDatos(datos);
+  }
+  res.json({ success: true });
+});
+
 app.delete('/api/registros/:numero', (req, res) => {
-    const numero = parseInt(req.params.numero);
-    try {
-        db.prepare('DELETE FROM registros WHERE numero = ?').run(numero);
-        console.log(`🗑 Registro #${numero} eliminado`);
-        res.json({ success: true });
-    } catch (err) {
-        console.error('Error al eliminar:', err);
-        res.status(500).json({ error: 'Error al eliminar' });
-    }
+  const numero = req.params.numero;
+  const datos = cargarDatos();
+  delete datos[numero];
+  guardarDatos(datos);
+  res.json({ success: true });
 });
-// Iniciar servidor
+
+app.post('/api/reiniciar', (req, res) => {
+  guardarDatos({});
+  console.log('🗑 Rifa reiniciada');
+  res.json({ success: true });
+});
+
 app.listen(PORT, () => {
-  console.log(`🏴‍️ Servidor corriendo en http://localhost:${PORT}`);
-  console.log(` Base de datos: rifa.db`);
+  console.log(`🏴‍☠️ Servidor corriendo en puerto ${PORT}`);
 });
