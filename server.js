@@ -24,6 +24,7 @@ function cargarDatos() {
 }
 
 function guardarDatos(datos) {
+  fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
   fs.writeFileSync(DB_FILE, JSON.stringify(datos, null, 2));
 }
 
@@ -69,7 +70,6 @@ app.post('/api/registros/:numero/aprobar', (req, res) => {
   const datos = cargarDatos();
   if (datos[numero]) {
     datos[numero].pagado = true;
-    datos[numero].fechaAprobacion = new Date().toISOString();
     guardarDatos(datos);
   }
   res.json({ success: true });
@@ -85,10 +85,10 @@ app.delete('/api/registros/:numero', (req, res) => {
 
 app.post('/api/reiniciar', (req, res) => {
   guardarDatos({});
-  console.log('🗑 Rifa reiniciada');
+  console.log(' Rifa reiniciada');
   res.json({ success: true });
 });
 
 app.listen(PORT, () => {
-  console.log(`🏴‍☠️ Servidor corriendo en puerto ${PORT}`);
+  console.log(`🏴☠️ Servidor corriendo en puerto ${PORT}`);
 });
