@@ -1,12 +1,12 @@
 /* ============================================================
    RIFA "TESORO PIRATA" — $200.000 EN EFECTIVO
-   Lógica del tablero
+   Lógica del tablero con modal de registro
    ============================================================ */
 const API_URL = "/api/registros";
 const POLL_INTERVAL_MS = 4000;
 const TOTAL_NUMEROS = 99;
 
-// Referencias al DOM
+// Referencias al DOM (nombres correctos)
 const tablero = document.getElementById('tablero');
 const modal = document.getElementById('modal');
 const numeroSel = document.getElementById('numero-seleccionado');
@@ -103,6 +103,7 @@ function cerrarModal() {
   numeroSeleccionado = null;
 }
 
+// Event listeners del modal
 if (modalClose) modalClose.addEventListener("click", cerrarModal);
 
 if (modal) {
