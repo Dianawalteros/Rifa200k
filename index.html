@@ -15,7 +15,7 @@
                 <span>Rifa $200K</span>
             </div>
             <div class="nav-links">
-                <button class="nav-btn active" id="btn-inicio" onclick="cambiarPantalla('inicio')"> Inicio</button>
+                <button class="nav-btn active" id="btn-inicio" onclick="cambiarPantalla('inicio')">🏠 Inicio</button>
                 <button class="nav-btn" id="btn-tablero" onclick="cambiarPantalla('tablero')">🗺️ Tablero</button>
                 <button class="nav-btn" id="btn-admin" onclick="cambiarPantalla('admin')">⚙️ Admin</button>
             </div>
@@ -30,7 +30,7 @@
                     <span class="badge">Rifa Benéfica · Edición Especial</span>
                     <h1 class="main-title">
                         <span>Gánate el</span>
-                        <span class="highlight">tesoro</span>
+                        <span class="highlight">tesoro del pirata</span>
                         <span>de $200.000</span>
                     </h1>
                     <p class="description">
@@ -44,7 +44,7 @@
                                 <div class="chest-lock"></div>
                             </div>
                             <div class="money">
-                                <span></span>
+                                <span>💵</span>
                                 <span>💰</span>
                                 <span>💵</span>
                             </div>
@@ -76,17 +76,19 @@
             </section>
         </main>
     </div>
-<!-- PANTALLA ADMIN -->
-<div id="pantalla-admin" class="pantalla">
-    <main class="admin-container">
-        <div class="admin-header">
-            <button class="back-btn" onclick="cambiarPantalla('inicio')">← Volver</button>
-            <h2>️ Panel de Administración</h2>
-            <div class="admin-buttons">
-                <button class="btn-eliminar" onclick="eliminar()">🗑</button>
-                <button class="btn-logout" onclick="logout()">🚪 Salir</button>
+
+    <!-- PANTALLA ADMIN -->
+    <div id="pantalla-admin" class="pantalla">
+        <main class="admin-container">
+            <div class="admin-header">
+                <button class="back-btn" onclick="cambiarPantalla('inicio')">← Volver</button>
+                <h2>⚙️ Panel de Administración</h2>
+                <div class="admin-buttons">
+                    <button class="btn-refresh" onclick="cargarAdmin()">🔄 Recargar</button>
+                    <button class="btn-danger" onclick="reiniciarRifa()">🗑 Reiniciar todo</button>
+                    <button class="btn-logout" onclick="logout()">🚪 Salir</button>
+                </div>
             </div>
-        </div>    
             <div class="stats">
                 <div class="stat-card">
                     <span class="stat-number" id="stat-total">0</span>
@@ -130,7 +132,7 @@
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal('modal-apartar')">×</button>
             <div class="modal-header">
-                <span class="modal-icon">🏴‍☠️</span>
+                <span class="modal-icon">🏴‍️</span>
                 <h2>¡Coordenada <span id="num-apartar">00</span>!</h2>
                 <p>Completa tus datos</p>
             </div>
@@ -162,24 +164,24 @@
             </div>
 
             <div class="datos-pago">
-    <h3>📲 Nequi</h3>
-    <div class="dato">
-        <span class="dato-label">Número:</span>
-        <span class="dato-valor" id="nequi-num">300 123 4567</span>
-        <button class="btn-copy" onclick="copiar('nequi-num')">📋 Copiar</button>
-    </div>
-    <div class="dato">
-        <span class="dato-label">Nombre:</span>
-        <span class="dato-valor">Juan Pérez</span>
-    </div>
-    <div class="precio-total">
-        <span> Valor a transferir:</span>
-        <strong>$10.000</strong>
-    </div>
-    <p class="instruccion">
-        📸 Después de pagar, sube el comprobante abajo
-    </p>
-</div>
+                <h3> Nequi</h3>
+                <div class="dato">
+                    <span class="dato-label">Número:</span>
+                    <span class="dato-valor" id="nequi-num">300 123 4567</span>
+                    <button class="btn-copy" onclick="copiar('nequi-num')">📋 Copiar</button>
+                </div>
+                <div class="dato">
+                    <span class="dato-label">Nombre:</span>
+                    <span class="dato-valor">Juan Pérez</span>
+                </div>
+                <div class="precio-total">
+                    <span>💰 Valor a transferir:</span>
+                    <strong>$10.000</strong>
+                </div>
+                <p class="instruccion">
+                    📸 Después de pagar, sube el comprobante abajo
+                </p>
+            </div>
             <form id="form-pago">
                 <div class="field">
                     <label>📤 Sube el comprobante</label>
@@ -200,29 +202,30 @@
             <p id="comp-info"></p>
         </div>
     </div>
+
     <!-- Modal Login Admin -->
-<div id="modal-login" class="modal">
-    <div class="modal-content modal-login">
-        <button class="modal-close" onclick="cerrarModalLogin()">×</button>
-        <div class="modal-header">
-            <span class="modal-icon"></span>
-            <h2>Acceso Administrador</h2>
-            <p>Ingresa la contraseña para continuar</p>
+    <div id="modal-login" class="modal">
+        <div class="modal-content modal-login">
+            <button class="modal-close" onclick="cerrarModalLogin()">×</button>
+            <div class="modal-header">
+                <span class="modal-icon">🔐</span>
+                <h2>Acceso Administrador</h2>
+                <p>Ingresa la contraseña para continuar</p>
+            </div>
+            <form id="form-login">
+                <div class="field">
+                    <label>👤 Usuario</label>
+                    <input id="login-user" type="text" required autocomplete="username">
+                </div>
+                <div class="field">
+                    <label>🔑 Contraseña</label>
+                    <input id="login-pass" type="password" required autocomplete="current-password">
+                </div>
+                <div id="login-error" class="login-error"></div>
+                <button type="submit" class="btn-primary">Ingresar</button>
+            </form>
         </div>
-        <form id="form-login">
-            <div class="field">
-                <label>👤 Usuario</label>
-                <input id="login-user" type="text" required autocomplete="username">
-            </div>
-            <div class="field">
-                <label>🔑 Contraseña</label>
-                <input id="login-pass" type="password" required autocomplete="current-password">
-            </div>
-            <div id="login-error" class="login-error"></div>
-            <button type="submit" class="btn-primary">Ingresar</button>
-        </form>
     </div>
-</div>
 
     <!-- Toast -->
     <div id="toast" class="toast">
