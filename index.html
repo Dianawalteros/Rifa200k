@@ -144,6 +144,29 @@
             <p id="comp-info"></p>
         </div>
     </div>
+    <!-- Modal Login Admin -->
+<div id="modal-login" class="modal">
+    <div class="modal-content modal-login">
+        <button class="modal-close" onclick="cerrarModal('modal-login')">×</button>
+        <div class="modal-header">
+            <span class="modal-icon">🔐</span>
+            <h2>Acceso Administrador</h2>
+            <p>Ingresa la contraseña para continuar</p>
+        </div>
+        <form id="form-login">
+            <div class="field">
+                <label>👤 Usuario</label>
+                <input id="login-user" type="text" required autocomplete="username">
+            </div>
+            <div class="field">
+                <label>🔑 Contraseña</label>
+                <input id="login-pass" type="password" required autocomplete="current-password">
+            </div>
+            <div id="login-error" class="login-error"></div>
+            <button type="submit" class="btn-primary">Ingresar</button>
+        </form>
+    </div>
+</div>
 
     <div id="toast" class="toast"><span id="toast-text"></span></div>
     <script src="script.js"></script>
