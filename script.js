@@ -1,6 +1,6 @@
 /* ============================================================
    RIFA "TESORO PIRATA" — $200.000 EN EFECTIVO
-   Lógica del tablero con modal de registro
+   Lógica completa con Login Admin y Botón Eliminar Universal
    ============================================================ */
 const API_URL = "/api/registros";
 const PRECIO = 10000;
@@ -10,29 +10,95 @@ const tablero = document.getElementById('tablero');
 const modalApartar = document.getElementById('modal-apartar');
 const modalPago = document.getElementById('modal-pago');
 const modalComp = document.getElementById('modal-comp');
+const modalLogin = document.getElementById('modal-login');
 const numApartar = document.getElementById('num-apartar');
 const numPago = document.getElementById('num-pago');
 const formApartar = document.getElementById('form-apartar');
 const formPago = document.getElementById('form-pago');
+const formLogin = document.getElementById('form-login');
 const toast = document.getElementById('toast');
 const toastText = document.getElementById('toast-text');
 const contador = document.getElementById('contador');
+const loginError = document.getElementById('login-error');
 
 let registros = {};
 let numActual = null;
 
-// NAVEGACIÓN
+// Credenciales Admin
+const ADMIN_USER = "sandra";
+const ADMIN_PASS = "1014"; 
+
+/* ============================================================
+   NAVEGACIÓN Y LOGIN
+   ============================================================ */
 function cambiarPantalla(p) {
+    if (p === 'admin') {
+        if (sessionStorage.getItem('adminAuth') === 'true') {
+            mostrarAdmin();
+        } else {
+            abrirModalLogin();
+        }
+        return;
+    }
+    
     document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
     document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
     document.getElementById('pantalla-' + p).classList.add('activa');
     document.getElementById('btn-' + p).classList.add('active');
+    
     if (p === 'tablero') cargarTodo();
-    if (p === 'admin') cargarTodo();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// CARGAR DATOS
+function abrirModalLogin() {
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+    if (loginError) loginError.textContent = '';
+    if (modalLogin) modalLogin.classList.add('is-open');
+    setTimeout(() => document.getElementById('login-user').focus(), 100);
+}
+
+function cerrarModalLogin() {
+    if (modalLogin) modalLogin.classList.remove('is-open');
+}
+
+if (formLogin) {
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = document.getElementById('login-user').value.trim();
+        const pass = document.getElementById('login-pass').value;
+        
+        if (user === ADMIN_USER && pass === ADMIN_PASS) {
+            sessionStorage.setItem('adminAuth', 'true');
+            cerrarModalLogin();
+            mostrarAdmin();
+            toastMsg('✅ Acceso concedido', 'success');
+        } else {
+            if (loginError) loginError.textContent = '❌ Usuario o contraseña incorrectos';
+            document.getElementById('login-pass').value = '';
+            document.getElementById('login-pass').focus();
+        }
+    });
+}
+
+function mostrarAdmin() {
+    document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
+    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+    document.getElementById('pantalla-admin').classList.add('activa');
+    document.getElementById('btn-admin').classList.add('active');
+    cargarAdmin();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function logout() {
+    sessionStorage.removeItem('adminAuth');
+    cambiarPantalla('inicio');
+    toastMsg('Sesión cerrada', 'info');
+}
+
+/* ============================================================
+   CARGA DE DATOS Y TABLERO
+   ============================================================ */
 async function cargarTodo() {
     try {
         const resp = await fetch(API_URL);
@@ -40,13 +106,14 @@ async function cargarTodo() {
         registros = await resp.json();
         crearTablero();
         actualizarContador();
-        if (document.getElementById('pantalla-admin').classList.contains('activa')) cargarAdmin();
+        if (document.getElementById('pantalla-admin')?.classList.contains('activa')) {
+            cargarAdmin();
+        }
     } catch (err) {
         console.error(err);
     }
 }
 
-// TABLERO
 function crearTablero() {
     if (!tablero) return;
     tablero.innerHTML = '';
@@ -73,7 +140,9 @@ function actualizarContador() {
     contador.textContent = disp + ' / 99';
 }
 
-// APARTAR
+/* ============================================================
+   APARTAR Y PAGO
+   ============================================================ */
 function abrirApartar(num, txt) {
     numActual = num;
     numApartar.textContent = txt;
@@ -108,7 +177,6 @@ formApartar.onsubmit = async (e) => {
     }
 };
 
-// PAGO
 function abrirPago(num) {
     numPago.textContent = String(num).padStart(2, '0');
     formPago.reset();
@@ -140,7 +208,9 @@ formPago.onsubmit = async (e) => {
     reader.readAsDataURL(file);
 };
 
-// ADMIN
+/* ============================================================
+   ADMIN (CON CORRECCIÓN DEL BOTÓN ELIMINAR)
+   ============================================================ */
 function cargarAdmin() {
     const total = Object.keys(registros).length;
     const pagados = Object.values(registros).filter(r => r.pagado).length;
@@ -169,9 +239,13 @@ function cargarAdmin() {
             `<button class="btn-ver" onclick="verComp(${num})">👁 Ver</button>` : 
             '<span style="color:#999">Sin comprobante</span>';
         
-        const btnAcc = r.pagado ? 
-            `<button class="btn-eliminar" onclick="eliminar(${num})">🗑</button>` :
-            (r.comprobante ? `<button class="btn-aprobar" onclick="aprobar(${num})">✓</button>` : '');
+        // ✅ CORRECCIÓN: El botón eliminar SIEMPRE está presente
+        let btnAcc = `<button class="btn-eliminar" onclick="eliminar(${num})" title="Eliminar">🗑</button>`;
+        
+        // Si NO está pagado pero SÍ tiene comprobante, agregamos el botón de aprobar ANTES del eliminar
+        if (!r.pagado && r.comprobante) {
+            btnAcc = `<button class="btn-aprobar" onclick="aprobar(${num})" title="Aprobar">✓</button>` + btnAcc;
+        }
         
         tr.innerHTML = `<td><strong>${String(num).padStart(2,'0')}</strong></td><td>${r.nombre}</td><td>${r.telefono}</td><td>${estado}</td><td>${btnVer}</td><td>${btnAcc}</td>`;
         tbody.appendChild(tr);
@@ -215,17 +289,18 @@ async function reiniciarRifa() {
     } catch (err) { toastMsg('Error', 'error'); }
 }
 
-function logout() {
-    sessionStorage.removeItem('adminAuth');
-    cambiarPantalla('inicio');
-    toastMsg('Sesión cerrada', 'info');
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function cerrarModal(id) { 
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('is-open'); 
 }
 
-// UTILIDADES
-function cerrarModal(id) { document.getElementById(id).classList.remove('is-open'); }
 function copiar(id) {
     navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => toastMsg('Copiado', 'success'));
 }
+
 function toastMsg(msg, tipo) {
     toastText.textContent = msg;
     toast.className = 'toast is-visible';
@@ -233,93 +308,14 @@ function toastMsg(msg, tipo) {
     setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
-['modal-apartar', 'modal-pago', 'modal-comp'].forEach(id => {
-    document.getElementById(id).onclick = (e) => { if (e.target.id === id) cerrarModal(id); };
-});
-/* ============================================================
-   FUNCIONES DE LOGIN Y AUTENTICACIÓN
-   ============================================================ */
-const ADMIN_USER = "sandra";
-const ADMIN_PASS = "1014"; // ⚠️ CAMBIA ESTA CONTRASEÑA
-
-const modalLogin = document.getElementById('modal-login');
-const formLogin = document.getElementById('form-login');
-const loginError = document.getElementById('login-error');
-
-// Modificar cambiarPantalla para pedir contraseña en admin
-function cambiarPantalla(p) {
-    if (p === 'admin') {
-        // Verificar si ya está autenticado
-        if (sessionStorage.getItem('adminAuth') === 'true') {
-            mostrarAdmin();
-        } else {
-            abrirModalLogin();
-        }
-        return;
+// Cerrar modales al hacer clic fuera
+['modal-apartar', 'modal-pago', 'modal-comp', 'modal-login'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.onclick = (e) => { if (e.target.id === id) cerrarModal(id); };
     }
-    
-    document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
-    document.getElementById('pantalla-' + p).classList.add('activa');
-    document.getElementById('btn-' + p).classList.add('active');
-    if (p === 'tablero') cargarTodo();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+});
 
-function abrirModalLogin() {
-    document.getElementById('login-user').value = '';
-    document.getElementById('login-pass').value = '';
-    if (loginError) loginError.textContent = '';
-    if (modalLogin) modalLogin.classList.add('is-open');
-    setTimeout(() => document.getElementById('login-user').focus(), 100);
-}
-
-function cerrarModalLogin() {
-    if (modalLogin) modalLogin.classList.remove('is-open');
-}
-
-// Formulario de login
-if (formLogin) {
-    formLogin.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const user = document.getElementById('login-user').value.trim();
-        const pass = document.getElementById('login-pass').value;
-        
-        if (user === ADMIN_USER && pass === ADMIN_PASS) {
-            sessionStorage.setItem('adminAuth', 'true');
-            cerrarModalLogin();
-            mostrarAdmin();
-            toastMsg('✅ Acceso concedido', 'success');
-        } else {
-            if (loginError) loginError.textContent = '❌ Usuario o contraseña incorrectos';
-            document.getElementById('login-pass').value = '';
-            document.getElementById('login-pass').focus();
-        }
-    });
-}
-
-function mostrarAdmin() {
-    document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
-    document.getElementById('pantalla-admin').classList.add('activa');
-    document.getElementById('btn-admin').classList.add('active');
-    cargarAdmin();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function logout() {
-    sessionStorage.removeItem('adminAuth');
-    cambiarPantalla('inicio');
-    toastMsg('Sesión cerrada', 'info');
-}
-
-// Cerrar modal login al hacer clic fuera
-if (modalLogin) {
-    modalLogin.addEventListener('click', (e) => {
-        if (e.target === modalLogin) cerrarModalLogin();
-    });
-}
-
+// Inicialización
 cargarTodo();
 setInterval(cargarTodo, 5000);
