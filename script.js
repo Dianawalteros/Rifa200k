@@ -1,4 +1,8 @@
-// RIFA PIRATA - Nequi + Comprobante
+/* ============================================================
+   RIFA "TESORO PIRATA" — $200.000 EN EFECTIVO
+   Lógica del tablero
+   ============================================================ */
+const API_URL = "/api/registros";
 const TOTAL = 99;
 const PRECIO = 10000;
 
