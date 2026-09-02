@@ -236,6 +236,90 @@ function toastMsg(msg, tipo) {
 ['modal-apartar', 'modal-pago', 'modal-comp'].forEach(id => {
     document.getElementById(id).onclick = (e) => { if (e.target.id === id) cerrarModal(id); };
 });
+/* ============================================================
+   FUNCIONES DE LOGIN Y AUTENTICACIÓN
+   ============================================================ */
+const ADMIN_USER = "sandra";
+const ADMIN_PASS = "1014"; // ⚠️ CAMBIA ESTA CONTRASEÑA
+
+const modalLogin = document.getElementById('modal-login');
+const formLogin = document.getElementById('form-login');
+const loginError = document.getElementById('login-error');
+
+// Modificar cambiarPantalla para pedir contraseña en admin
+function cambiarPantalla(p) {
+    if (p === 'admin') {
+        // Verificar si ya está autenticado
+        if (sessionStorage.getItem('adminAuth') === 'true') {
+            mostrarAdmin();
+        } else {
+            abrirModalLogin();
+        }
+        return;
+    }
+    
+    document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
+    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+    document.getElementById('pantalla-' + p).classList.add('activa');
+    document.getElementById('btn-' + p).classList.add('active');
+    if (p === 'tablero') cargarTodo();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function abrirModalLogin() {
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+    if (loginError) loginError.textContent = '';
+    if (modalLogin) modalLogin.classList.add('is-open');
+    setTimeout(() => document.getElementById('login-user').focus(), 100);
+}
+
+function cerrarModalLogin() {
+    if (modalLogin) modalLogin.classList.remove('is-open');
+}
+
+// Formulario de login
+if (formLogin) {
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const user = document.getElementById('login-user').value.trim();
+        const pass = document.getElementById('login-pass').value;
+        
+        if (user === ADMIN_USER && pass === ADMIN_PASS) {
+            sessionStorage.setItem('adminAuth', 'true');
+            cerrarModalLogin();
+            mostrarAdmin();
+            toastMsg('✅ Acceso concedido', 'success');
+        } else {
+            if (loginError) loginError.textContent = '❌ Usuario o contraseña incorrectos';
+            document.getElementById('login-pass').value = '';
+            document.getElementById('login-pass').focus();
+        }
+    });
+}
+
+function mostrarAdmin() {
+    document.querySelectorAll('.pantalla').forEach(x => x.classList.remove('activa'));
+    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+    document.getElementById('pantalla-admin').classList.add('activa');
+    document.getElementById('btn-admin').classList.add('active');
+    cargarAdmin();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function logout() {
+    sessionStorage.removeItem('adminAuth');
+    cambiarPantalla('inicio');
+    toastMsg('Sesión cerrada', 'info');
+}
+
+// Cerrar modal login al hacer clic fuera
+if (modalLogin) {
+    modalLogin.addEventListener('click', (e) => {
+        if (e.target === modalLogin) cerrarModalLogin();
+    });
+}
 
 cargarTodo();
 setInterval(cargarTodo, 5000);
