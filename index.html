@@ -10,10 +10,7 @@
     <!-- Navegación -->
     <nav class="main-nav">
         <div class="nav-container">
-            <div class="nav-brand">
-                <span>🏴‍☠️</span>
-                <span>Rifa $200K</span>
-            </div>
+            <div class="nav-brand" onclick="cambiarPantalla('inicio')">🏴‍☠️ Rifa $200K</div>
             <div class="nav-links">
                 <button class="nav-btn active" id="btn-inicio" onclick="cambiarPantalla('inicio')">🏠 Inicio</button>
                 <button class="nav-btn" id="btn-tablero" onclick="cambiarPantalla('tablero')">🗺️ Tablero</button>
@@ -27,32 +24,23 @@
         <main class="main-container">
             <section class="poster">
                 <div class="poster-content">
-                    <span class="badge">Rifa Benéfica · Edición Especial</span>
+                    <span class="badge">Rifa Comunitaria · Edición Tesoro</span>
                     <h1 class="main-title">
                         <span>Gánate el</span>
-                        <span class="highlight">tesoro del pirata</span>
-                        <span>de $200.000</span>
+                        <span class="highlight">tesoro de $200.000</span>
                     </h1>
                     <p class="description">
-                        Un boleto, noventa y nueve números, un solo ganador. 
-                        Elige tu número de la suerte y descubre el cofre del tesoro.
+                        99 números, un solo capitán ganador. Elige tu coordenada y hazte al botín en efectivo.
                     </p>
                     <div class="treasure">
                         <div class="chest">
                             <div class="chest-lid"></div>
-                            <div class="chest-body">
-                                <div class="chest-lock"></div>
-                            </div>
-                            <div class="money">
-                                <span>💵</span>
-                                <span>💰</span>
-                                <span>💵</span>
-                            </div>
+                            <div class="chest-body"><div class="chest-lock"></div></div>
+                            <div class="money"><span>💵</span><span>💰</span><span>💵</span></div>
                         </div>
                     </div>
                     <button class="cta-button" onclick="cambiarPantalla('tablero')">
-                        <span>Ver el mapa del tesoro</span>
-                        <span>→</span>
+                        <span>Ver el mapa del tesoro</span><span>→</span>
                     </button>
                 </div>
             </section>
@@ -67,10 +55,7 @@
                     <button class="back-btn" onclick="cambiarPantalla('inicio')">← Volver</button>
                     <h2>🗺️ Mapa del Tesoro</h2>
                     <p>Elige tu coordenada (01 - 99)</p>
-                    <div class="counter">
-                        <span>Disponibles: </span>
-                        <strong id="contador">99 / 99</strong>
-                    </div>
+                    <div class="counter">Disponibles: <strong id="contador">99 / 99</strong></div>
                 </div>
                 <div id="tablero" class="treasure-board"></div>
             </section>
@@ -89,97 +74,55 @@
                 </div>
             </div>
             <div class="stats">
-                <div class="stat-card">
-                    <span class="stat-number" id="stat-total">0</span>
-                    <span class="stat-label">Total</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="stat-pagados">0</span>
-                    <span class="stat-label">Pagados ✓</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="stat-pendientes">0</span>
-                    <span class="stat-label">Pendientes ⏳</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">$<span id="stat-recaudado">0</span></span>
-                    <span class="stat-label">Recaudado</span>
-                </div>
+                <div class="stat-card"><span class="stat-number" id="stat-total">0</span><span class="stat-label">Total</span></div>
+                <div class="stat-card"><span class="stat-number" id="stat-pagados">0</span><span class="stat-label">Pagados ✓</span></div>
+                <div class="stat-card"><span class="stat-number" id="stat-pendientes">0</span><span class="stat-label">Pendientes </span></div>
+                <div class="stat-card"><span class="stat-number">$<span id="stat-recaudado">0</span></span><span class="stat-label">Recaudado</span></div>
             </div>
             <div class="table-container">
                 <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Teléfono</th>
-                            <th>Estado</th>
-                            <th>Comprobante</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-body">
-                        <tr><td colspan="6" class="loading">Cargando...</td></tr>
-                    </tbody>
+                    <thead><tr><th>#</th><th>Nombre</th><th>Teléfono</th><th>Estado</th><th>Comprobante</th><th>Acciones</th></tr></thead>
+                    <tbody id="tabla-body"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </main>
     </div>
 
-    <!-- Modal 1: Apartar -->
+    <!-- Modal Apartar -->
     <div id="modal-apartar" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal('modal-apartar')">×</button>
             <div class="modal-header">
-                <span class="modal-icon">🏴‍️</span>
+                <span class="modal-icon">‍☠️</span>
                 <h2>¡Coordenada <span id="num-apartar">00</span>!</h2>
-                <p>Completa tus datos</p>
             </div>
             <form id="form-apartar">
-                <div class="field">
-                    <label>📛 Nombre</label>
-                    <input id="nombre-ap" type="text" required>
-                </div>
-                <div class="field">
-                    <label>📱 Teléfono</label>
-                    <input id="tel-ap" type="tel" required>
-                </div>
-                <div class="field">
-                    <label>📧 Email (opcional)</label>
-                    <input id="email-ap" type="email">
-                </div>
+                <div class="field"><label>📛 Nombre</label><input id="nombre-ap" type="text" required></div>
+                <div class="field"><label>📱 Teléfono</label><input id="tel-ap" type="tel" required></div>
+                <div class="field"><label> Email (opcional)</label><input id="email-ap" type="email"></div>
                 <button type="submit" class="btn-primary">Apartar número</button>
             </form>
         </div>
     </div>
 
-    <!-- Modal 2: Pago -->
+    <!-- Modal Pago -->
     <div id="modal-pago" class="modal">
-        <div class="modal-content modal-pago">
+        <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal('modal-pago')">×</button>
             <div class="modal-header">
                 <span class="modal-icon">💳</span>
                 <h2>Paga tu número <span id="num-pago">00</span></h2>
             </div>
-
             <div class="datos-pago">
-                <h3> Nequi</h3>
+                <h3>📲 Nequi</h3>
                 <div class="dato">
                     <span class="dato-label">Número:</span>
                     <span class="dato-valor" id="nequi-num">300 123 4567</span>
                     <button class="btn-copy" onclick="copiar('nequi-num')">📋 Copiar</button>
                 </div>
-                <div class="dato">
-                    <span class="dato-label">Nombre:</span>
-                    <span class="dato-valor">Juan Pérez</span>
-                </div>
-                <div class="precio-total">
-                    <span>💰 Valor a transferir:</span>
-                    <strong>$10.000</strong>
-                </div>
-                <p class="instruccion">
-                    📸 Después de pagar, sube el comprobante abajo
-                </p>
+                <div class="dato"><span class="dato-label">Nombre:</span><span class="dato-valor">Tu Nombre</span></div>
+                <div class="precio-total"><span>💰 Valor:</span><strong>$10.000</strong></div>
+                <p class="instruccion">📸 Después de pagar, sube el comprobante abajo</p>
             </div>
             <form id="form-pago">
                 <div class="field">
@@ -192,7 +135,7 @@
         </div>
     </div>
 
-    <!-- Modal 3: Ver comprobante (admin) -->
+    <!-- Modal Comprobante -->
     <div id="modal-comp" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal('modal-comp')">×</button>
@@ -202,35 +145,7 @@
         </div>
     </div>
 
-    <!-- Modal Login Admin -->
-    <div id="modal-login" class="modal">
-        <div class="modal-content modal-login">
-            <button class="modal-close" onclick="cerrarModalLogin()">×</button>
-            <div class="modal-header">
-                <span class="modal-icon">🔐</span>
-                <h2>Acceso Administrador</h2>
-                <p>Ingresa la contraseña para continuar</p>
-            </div>
-            <form id="form-login">
-                <div class="field">
-                    <label>👤 Usuario</label>
-                    <input id="login-user" type="text" required autocomplete="username">
-                </div>
-                <div class="field">
-                    <label>🔑 Contraseña</label>
-                    <input id="login-pass" type="password" required autocomplete="current-password">
-                </div>
-                <div id="login-error" class="login-error"></div>
-                <button type="submit" class="btn-primary">Ingresar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="toast">
-        <span id="toast-text"></span>
-    </div>
-
+    <div id="toast" class="toast"><span id="toast-text"></span></div>
     <script src="script.js"></script>
 </body>
 </html>
