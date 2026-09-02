@@ -229,7 +229,118 @@ function cambiarPantalla(pantalla) {
   if (pantalla === 'tablero') cargarRegistros();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+/* ---------- Funciones de navegación y admin ---------- */
+function cambiarPantalla(pantalla) {
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pantalla-' + pantalla).classList.add('activa');
+  document.getElementById('btn-' + pantalla).classList.add('active');
+  if (pantalla === 'tablero') cargarRegistros();
+  if (pantalla === 'admin') cargarAdmin();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
+function logout() {
+  sessionStorage.removeItem('adminAuth');
+  cambiarPantalla('inicio');
+  mostrarToast('Sesión cerrada');
+}
+
+function cerrarModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('is-open');
+}
+
+function copiar(id) {
+  const txt = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    mostrarToast('Copiado al portapapeles');
+  });
+}
+
+function cargarAdmin() {
+  const total = Object.keys(registros).length;
+  const pagados = Object.values(registros).filter(r => r.pagado).length;
+  const pendientes = total - pagados;
+  const recaudado = pagados * 10000;
+  
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-pagados').textContent = pagados;
+  document.getElementById('stat-pendientes').textContent = pendientes;
+  document.getElementById('stat-recaudado').textContent = recaudado.toLocaleString();
+  
+  const tbody = document.getElementById('tabla-body');
+  tbody.innerHTML = '';
+  
+  if (total === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">Sin registros</td></tr>';
+    return;
+  }
+  
+  Object.entries(registros).forEach(([num, r]) => {
+    const tr = document.createElement('tr');
+    const estado = r.pagado ? 
+      '<span class="estado estado-pagado">✓ Pagado</span>' : 
+      '<span class="estado estado-pendiente"> Pendiente</span>';
+    
+    const btnVer = r.comprobante ? 
+      `<button class="btn-ver" onclick="verComp(${num})"> Ver</button>` : 
+      '<span style="color:#999">Sin comprobante</span>';
+    
+    const btnAcc = r.pagado ? 
+      `<button class="btn-eliminar" onclick="eliminar(${num})">🗑</button>` :
+      (r.comprobante ? `<button class="btn-aprobar" onclick="aprobar(${num})">✓</button>` : '');
+    
+    tr.innerHTML = `<td><strong>${String(num).padStart(2,'0')}</strong></td><td>${r.nombre}</td><td>${r.telefono}</td><td>${estado}</td><td>${btnVer}</td><td>${btnAcc}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function verComp(num) {
+  const r = registros[num];
+  if (!r || !r.comprobante) return;
+  document.getElementById('comp-num').textContent = String(num).padStart(2,'0');
+  document.getElementById('comp-img').src = r.comprobante;
+  document.getElementById('comp-info').innerHTML = `<strong>${r.nombre}</strong> - ${r.telefono}<br><small>${new Date(r.fecha).toLocaleString()}</small>`;
+  document.getElementById('modal-comp').classList.add('is-open');
+}
+
+async function aprobar(num) {
+  if (!confirm('¿Aprobar pago del #' + String(num).padStart(2,'0') + '?')) return;
+  try {
+    await fetch(`${API_URL}/${num}/aprobar`, { method: 'POST' });
+    mostrarToast('Pago aprobado');
+    cargarRegistros();
+    cargarAdmin();
+  } catch (err) {
+    mostrarToast('Error al aprobar');
+  }
+}
+
+async function eliminar(num) {
+  if (!confirm('¿Eliminar registro #' + String(num).padStart(2,'0') + '?')) return;
+  try {
+    await fetch(`${API_URL}/${num}`, { method: 'DELETE' });
+    mostrarToast('Eliminado');
+    cargarRegistros();
+    cargarAdmin();
+  } catch (err) {
+    mostrarToast('Error al eliminar');
+  }
+}
+
+async function reiniciarRifa() {
+  if (!confirm('⚠️ ¿Reiniciar toda la rifa? Se borrarán todos los registros.')) return;
+  if (!confirm('✋ ÚLTIMA ADVERTENCIA: ¿Continuar?')) return;
+  try {
+    await fetch('/api/reiniciar', { method: 'POST' });
+    mostrarToast('Rifa reiniciada');
+    cargarRegistros();
+    cargarAdmin();
+  } catch (err) {
+    mostrarToast('Error al reiniciar');
+  }
+}
 /* ---------- Inicio ---------- */
 cargarRegistros();
 setInterval(cargarRegistros, POLL_INTERVAL_MS);
