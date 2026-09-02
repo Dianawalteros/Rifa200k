@@ -65,7 +65,7 @@ function crearTablero() {
                 return function() { abrirApartar(num, txt); };
             })(i, n);
         }
-        tablero.appendChild(btn);
+        tablero.appendChild(ticket);
     }
 }
 
