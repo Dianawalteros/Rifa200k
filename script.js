@@ -262,12 +262,41 @@ function verComp(num) {
 }
 
 async function aprobar(num) {
-    if (!confirm('¿Aprobar pago del #' + String(num).padStart(2,'0') + '?')) return;
+    if (!confirm('¿Aprobar pago del #' + String(num).padStart(2,'0') + ' y enviar mensaje de confirmación?')) return;
+    
     try {
+        // 1. Aprobar el pago en el servidor
         await fetch(`${API_URL}/${num}/aprobar`, { method: 'POST' });
-        toastMsg('Pago aprobado', 'success');
+        
+        // 2. Obtener los datos del registro
+        const registro = registros[num];
+        
+        if (registro && registro.telefono) {
+            // 3. Preparar el mensaje de WhatsApp
+            const numeroLimpio = registro.telefono.replace(/\D/g, ''); // Solo números
+            const numeroWhatsApp = numeroLimpio.startsWith('57') ? numeroLimpio : '57' + numeroLimpio;
+            
+            const mensaje = `¡Hola ${registro.nombre}! 🏴‍☠️💰\n\n` +
+                `✅ Tu pago para la Rifa del Tesoro de $200.000 ha sido APROBADO.\n\n` +
+                `🎟️ Número: ${String(num).padStart(2, '0')}\n` +
+                `💰 Valor pagado: $${PRECIO.toLocaleString()}\n\n` +
+                `🎉 ¡Ya estás participando oficialmente! Te avisaremos cuando se realice el sorteo.\n\n` +
+                `¡Mucha suerte, capitán! 🏴‍☠️⚓`;
+            
+            // 4. Crear el enlace de WhatsApp
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            
+            // 5. Abrir WhatsApp en nueva pestaña
+            window.open(urlWhatsApp, '_blank');
+        }
+        
+        toastMsg('✅ Pago aprobado y mensaje enviado', 'success');
         cargarTodo();
-    } catch (err) { toastMsg('Error', 'error'); }
+        
+    } catch (err) { 
+        console.error(err);
+        toastMsg('Error al aprobar', 'error'); 
+    }
 }
 
 async function eliminar(num) {
