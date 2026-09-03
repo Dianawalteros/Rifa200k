@@ -1,6 +1,249 @@
 /* ============================================================
    FONDO CON MAPA DEL TESORO
    ============================================================ */
+/* ============================================================
+   OPTIMIZACIÓN PARA MÓVILES - 100% ZOOM
+   ============================================================ */
+
+/* Prevenir zoom y asegurar viewport correcto */
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    touch-action: manipulation;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+}
+
+/* Eliminar zoom por defecto en inputs */
+input, select, textarea, button {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* ============================================================
+   NAVEGACIÓN RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .main-nav {
+        padding: 0.8rem 1rem;
+    }
+    
+    .nav-brand {
+        font-size: 1.2rem;
+    }
+    
+    .nav-links {
+        gap: 0.3rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================================
+   CONTENEDORES RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .main-container, .admin-container {
+        padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .poster {
+        padding: 2rem 1rem;
+        margin: 0.5rem;
+    }
+    
+    .main-title {
+        font-size: 1.8rem;
+    }
+    
+    .highlight {
+        font-size: 2.2rem;
+    }
+    
+    .description {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================================
+   TABLERO RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .board-section {
+        padding: 1.5rem 1rem;
+        margin: 1rem auto;
+        width: 98%;
+    }
+    
+    .board-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .treasure-board {
+        grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+        gap: 8px;
+    }
+    
+    .ticket {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+}
+
+/* ============================================================
+   ADMIN RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .admin-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    /* Tabla responsive */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .admin-table {
+        min-width: 600px; /* ✅ Permite scroll horizontal en tabla */
+        font-size: 0.9rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 0.6rem 0.4rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* ============================================================
+   PANTALLAS MUY PEQUEÑAS (menos de 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+    .nav-brand {
+        font-size: 1rem;
+    }
+    
+    .nav-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .poster {
+        padding: 1.5rem 0.8rem;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+    }
+    
+    .highlight {
+        font-size: 1.8rem;
+    }
+    
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .treasure-board {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 6px;
+    }
+    
+    .ticket {
+        font-size: 0.9rem;
+    }
+    
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+}
+
+/* ============================================================
+   BOTONES TÁCTILES AMIGABLES
+   ============================================================ */
+@media (max-width: 768px) {
+    button, .btn, .nav-btn, .ticket {
+        min-height: 44px; /* ✅ Tamaño mínimo para touch */
+        min-width: 44px;
+    }
+    
+    .btn-eliminar, .btn-aprobar, .btn-ver {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================================
+   MODALES RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .modal {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+    
+    .modal-content {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        max-height: 85vh;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .field input {
+        padding: 0.8rem;
+        font-size: 16px; /* ✅ Previene zoom en iOS */
+    }
+}
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: url('fondo-mapa.png') center/cover no-repeat fixed;
