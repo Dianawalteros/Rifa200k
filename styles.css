@@ -530,7 +530,7 @@ body::before {
     box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
 }
 /* ============================================================
-   MODALES
+   MODAL - MÁRGENES Y ESPACIADO CORREGIDO
    ============================================================ */
 .modal {
     display: none;
@@ -539,10 +539,15 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     z-index: 2000;
     align-items: center;
     justify-content: center;
+    padding: 20px;
+    overflow-y: auto; /* ✅ Permite scroll vertical si es necesario */
+    overflow-x: hidden; /* ✅ Elimina scroll horizontal */
 }
 
 .modal.is-open {
@@ -550,66 +555,105 @@ body::before {
 }
 
 .modal-content {
-    background: rgba(244, 232, 208, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 4px solid #8B4513;
+    background: rgba(244, 232, 208, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 3px solid #8B4513;
     border-radius: 20px;
-    padding: 2rem;
-    max-width: 500px;
-    width: 90%;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 450px; /* ✅ Ancho máximo controlado */
+    margin: auto; /* ✅ Centrado automático */
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow-x: hidden; /* ✅ Sin scroll horizontal */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box; /* ✅ Incluye padding en el ancho */
 }
 
+/* Botón cerrar */
 .modal-close {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     background: none;
     border: none;
     font-size: 2rem;
     cursor: pointer;
     color: #8B4513;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+    line-height: 1;
+    z-index: 10;
 }
 
+.modal-close:hover {
+    background: rgba(139, 69, 19, 0.1);
+    transform: rotate(90deg);
+}
+
+/* Header del modal */
 .modal-header {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(139, 69, 19, 0.2);
 }
 
 .modal-icon {
     font-size: 3rem;
     display: block;
+    margin-bottom: 0.5rem;
 }
 
 .modal-header h2 {
     color: #5D3A1A;
-    margin-top: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
 }
 
+/* Campos del formulario */
 .field {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .field label {
     display: block;
     font-weight: 600;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     color: #5D3A1A;
+    font-size: 0.95rem;
 }
 
 .field input {
     width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #8B4513;
-    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    border: 2px solid rgba(139, 69, 19, 0.3);
+    border-radius: 10px;
     font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s;
+    box-sizing: border-box; /* ✅ Incluye padding en el ancho */
 }
 
-.btn-primary {
+.field input:focus {
+    outline: none;
+    border-color: #FFD700;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+/* Botón principal del modal */
+.modal-content .btn-primary {
     width: 100%;
     background: linear-gradient(135deg, #FFD700, #B8860B);
     color: #5D3A1A;
@@ -617,16 +661,47 @@ body::before {
     padding: 1rem;
     font-size: 1.1rem;
     font-weight: 700;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s;
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    box-sizing: border-box;
 }
 
-.btn-primary:hover {
+.modal-content .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .modal {
+        padding: 15px;
+    }
+    
+    .modal-content {
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+        margin: 10px auto;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        padding: 1.5rem 1rem;
+    }
+}
 /* Datos de pago */
 .datos-pago {
     background: rgba(244, 228, 193, 0.75);
