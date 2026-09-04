@@ -280,7 +280,7 @@ async function aprobar(num) {
                 `✅ Tu pago para la Rifa del Tesoro de $200.000 ha sido APROBADO.\n\n` +
                 `🎟️ Número: ${String(num).padStart(2, '0')}\n` +
                 `💰 Valor pagado: $${PRECIO.toLocaleString()}\n\n` +
-                `🎉 ¡Ya estás participando oficialmente! Te avisaremos cuando se realice el sorteo.\n\n` +
+                `🎉 ¡Ya estás participando oficialmente! Te avisaremos cuando se realice el sorteo. recuerda que gana con las dos ultimas sifras del premio mayor de la loteria de Boyaca\n\n` +
                 `¡Mucha suerte, capitán! 🏴‍☠️⚓`;
             
             // 4. Crear el enlace de WhatsApp
