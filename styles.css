@@ -1,11 +1,12 @@
 /* ============================================================
-   FONDO CON MAPA DEL TESORO
+   RESET Y BASE
    ============================================================ */
-/* ============================================================
-   OPTIMIZACIÓN PARA MÓVILES - 100% ZOOM
-   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Prevenir zoom y asegurar viewport correcto */
 html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
@@ -14,242 +15,17 @@ html {
 }
 
 body {
-    overflow-x: hidden;
-    max-width: 100vw;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    touch-action: manipulation;
-}
-
-/* Eliminar zoom por defecto en inputs */
-input, select, textarea, button {
-    font-size: 16px !important;
-    -webkit-text-size-adjust: 100%;
-}
-
-/* ============================================================
-   NAVEGACIÓN RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .main-nav {
-        padding: 0.8rem 1rem;
-    }
-    
-    .nav-brand {
-        font-size: 1.2rem;
-    }
-    
-    .nav-links {
-        gap: 0.3rem;
-    }
-    
-    .nav-btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* ============================================================
-   CONTENEDORES RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .main-container, .admin-container {
-        padding: 1rem;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .poster {
-        padding: 2rem 1rem;
-        margin: 0.5rem;
-    }
-    
-    .main-title {
-        font-size: 1.8rem;
-    }
-    
-    .highlight {
-        font-size: 2.2rem;
-    }
-    
-    .description {
-        font-size: 1rem;
-    }
-}
-
-/* ============================================================
-   TABLERO RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .board-section {
-        padding: 1.5rem 1rem;
-        margin: 1rem auto;
-        width: 98%;
-    }
-    
-    .board-header h2 {
-        font-size: 1.5rem;
-    }
-    
-    .treasure-board {
-        grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
-        gap: 8px;
-    }
-    
-    .ticket {
-        font-size: 1rem;
-        padding: 0.5rem;
-    }
-}
-
-/* ============================================================
-   ADMIN RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .admin-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    .admin-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.8rem;
-    }
-    
-    .stat-card {
-        padding: 1rem;
-    }
-    
-    .stat-number {
-        font-size: 2rem;
-    }
-    
-    .stat-label {
-        font-size: 0.8rem;
-    }
-    
-    /* Tabla responsive */
-    .table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .admin-table {
-        min-width: 600px; /* ✅ Permite scroll horizontal en tabla */
-        font-size: 0.9rem;
-    }
-    
-    .admin-table th,
-    .admin-table td {
-        padding: 0.6rem 0.4rem;
-        font-size: 0.85rem;
-    }
-}
-
-/* ============================================================
-   PANTALLAS MUY PEQUEÑAS (menos de 480px)
-   ============================================================ */
-@media (max-width: 480px) {
-    .nav-brand {
-        font-size: 1rem;
-    }
-    
-    .nav-btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.85rem;
-    }
-    
-    .poster {
-        padding: 1.5rem 0.8rem;
-    }
-    
-    .main-title {
-        font-size: 1.5rem;
-    }
-    
-    .highlight {
-        font-size: 1.8rem;
-    }
-    
-    .cta-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-    }
-    
-    .treasure-board {
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-        gap: 6px;
-    }
-    
-    .ticket {
-        font-size: 0.9rem;
-    }
-    
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .stat-number {
-        font-size: 1.8rem;
-    }
-}
-
-/* ============================================================
-   BOTONES TÁCTILES AMIGABLES
-   ============================================================ */
-@media (max-width: 768px) {
-    button, .btn, .nav-btn, .ticket {
-        min-height: 44px; /* ✅ Tamaño mínimo para touch */
-        min-width: 44px;
-    }
-    
-    .btn-eliminar, .btn-aprobar, .btn-ver {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* ============================================================
-   MODALES RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .modal {
-        padding: 10px;
-        align-items: flex-start;
-        padding-top: 60px;
-    }
-    
-    .modal-content {
-        width: 95vw !important;
-        max-width: 95vw !important;
-        margin: 0 auto;
-        padding: 1.5rem 1rem;
-        max-height: 85vh;
-    }
-    
-    .modal-header h2 {
-        font-size: 1.4rem;
-    }
-    
-    .field input {
-        padding: 0.8rem;
-        font-size: 16px; /* ✅ Previene zoom en iOS */
-    }
-}
-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: url('fondo-mapa.png') center/cover no-repeat fixed;
     background-color: #f4e4c1;
     min-height: 100vh;
     position: relative;
+    overflow-x: hidden;
+    max-width: 100vw;
+    color: #5D3A1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
 }
 
 /* Overlay para que el contenido sea legible */
@@ -260,8 +36,14 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(244, 228, 193, 0.75); /* Opacidad: ajusta de 0.6 a 0.9 */
+    background: rgba(244, 228, 193, 0.75);
     z-index: -1;
+}
+
+/* Prevenir zoom en inputs */
+input, select, textarea, button {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* ============================================================
@@ -294,6 +76,7 @@ body::before {
     color: #FFD700;
     cursor: pointer;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
 }
 
 .nav-links {
@@ -312,6 +95,7 @@ body::before {
     font-weight: 600;
     transition: all 0.3s;
     backdrop-filter: blur(5px);
+    white-space: nowrap;
 }
 
 .nav-btn:hover {
@@ -350,7 +134,7 @@ body::before {
 }
 
 /* ============================================================
-   POSTER / CONTENIDO PRINCIPAL
+   POSTER / INICIO
    ============================================================ */
 .poster {
     background: rgba(255, 255, 255, 0.55);
@@ -592,6 +376,7 @@ body::before {
 .admin-header h2 {
     font-family: 'Cinzel', serif;
     color: #5D3A1A;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .admin-buttons {
@@ -608,7 +393,7 @@ body::before {
 }
 
 .stat-card {
-    background: rgba(255, 229, 92, 0.65) !important;
+    background: rgba(255, 229, 92, 0.65);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: 1.5rem;
@@ -618,6 +403,7 @@ body::before {
     border: 2px solid rgba(255, 215, 0, 0.6);
     transition: all 0.3s;
 }
+
 .stat-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
@@ -637,15 +423,14 @@ body::before {
     font-weight: 600;
 }
 
-/* ============================================================
-   TABLA DEL ADMIN - EFECTO VIDRIO
-   ============================================================ */
+/* Tabla del admin */
 .table-container {
-    background: rgba(255, 255, 255, 0.55) !important;
+    background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 15px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(139, 69, 19, 0.3);
 }
@@ -653,20 +438,22 @@ body::before {
 .admin-table {
     width: 100%;
     border-collapse: collapse;
-    background: transparent !important;
+    background: transparent;
+    min-width: 600px;
 }
 
 .admin-table th {
-    background: rgba(139, 69, 19, 0.85) !important;
+    background: rgba(139, 69, 19, 0.85);
     color: white;
     font-weight: 600;
     padding: 1rem;
     text-align: left;
     border-bottom: 2px solid #FFD700;
+    white-space: nowrap;
 }
 
 .admin-table td {
-    background: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.3);
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid rgba(139, 69, 19, 0.1);
@@ -674,26 +461,28 @@ body::before {
 }
 
 .admin-table tr:hover td {
-    background: rgba(255, 248, 220, 0.5) !important;
+    background: rgba(255, 248, 220, 0.5);
 }
+
 .estado {
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .estado-pagado {
-    background: #d4edda;
+    background: rgba(212, 237, 218, 0.8);
     color: #155724;
 }
 
 .estado-pendiente {
-    background: #fff3cd;
+    background: rgba(255, 243, 205, 0.8);
     color: #856404;
 }
 
-/* Botones */
+/* Botones generales */
 .back-btn, .btn-refresh, .btn-danger, .btn-logout, .btn-ver, .btn-aprobar, .btn-eliminar {
     border: none;
     padding: 0.6rem 1.2rem;
@@ -701,79 +490,74 @@ body::before {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s;
+    white-space: nowrap;
 }
 
 .back-btn {
-    background: rgba(139, 69, 19, 0.1);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
     border: 2px solid #8B4513;
     color: #5D3A1A;
 }
 
-.btn-refresh {
-    background: #1E90FF;
-    color: white;
-}
-
-.btn-danger, .btn-logout, .btn-eliminar {
-    background: #dc3545;
-    color: white;
-}
-
-.btn-ver {
-    background: #17a2b8;
-    color: white;
-}
-
-.btn-aprobar {
-    background: #28a745;
-    color: white;
-}
-
-.back-btn:hover, .btn-refresh:hover, .btn-danger:hover, .btn-logout:hover, 
-.btn-ver:hover, .btn-aprobar:hover, .btn-eliminar:hover {
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
-/* ============================================================
-   BOTONES DEL ADMIN
-   ============================================================ */
-.btn-danger, .btn-logout {
-    background: rgba(220, 53, 69, 0.85) !important;
+
+.btn-refresh {
+    background: rgba(30, 144, 255, 0.85);
     backdrop-filter: blur(5px);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
 }
 
-.btn-danger:hover, .btn-logout:hover {
-    background: rgba(200, 35, 51, 0.95) !important;
+.btn-refresh:hover {
+    background: rgba(0, 102, 204, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
+}
+
+.btn-danger, .btn-logout, .btn-eliminar {
+    background: rgba(220, 53, 69, 0.85);
+    backdrop-filter: blur(5px);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-danger:hover, .btn-logout:hover, .btn-eliminar:hover {
+    background: rgba(200, 35, 51, 0.95);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
 }
 
-.btn-refresh {
-    background: rgba(30, 144, 255, 0.85) !important;
-    backdrop-filter: blur(5px);
+.btn-ver {
+    background: rgba(23, 162, 184, 0.85);
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
 }
 
-.btn-refresh:hover {
-    background: rgba(0, 102, 204, 0.95) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.4);
+.btn-ver:hover {
+    background: rgba(19, 132, 150, 0.95);
+    transform: scale(1.1);
 }
+
+.btn-aprobar {
+    background: rgba(40, 167, 69, 0.85);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    margin-right: 5px;
+}
+
+.btn-aprobar:hover {
+    background: rgba(32, 201, 151, 0.95);
+    transform: scale(1.1);
+}
+
 /* ============================================================
-   MODAL - MÁRGENES Y ESPACIADO CORREGIDO
+   MODALES
    ============================================================ */
 .modal {
     display: none;
@@ -789,8 +573,8 @@ body::before {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    overflow-y: auto; /* ✅ Permite scroll vertical si es necesario */
-    overflow-x: hidden; /* ✅ Elimina scroll horizontal */
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .modal.is-open {
@@ -805,17 +589,15 @@ body::before {
     border-radius: 20px;
     padding: 2.5rem 2rem;
     width: 100%;
-    max-width: 450px; /* ✅ Ancho máximo controlado */
-    margin: auto; /* ✅ Centrado automático */
+    max-width: 450px;
+    margin: auto;
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
-    overflow-x: hidden; /* ✅ Sin scroll horizontal */
+    overflow-x: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    box-sizing: border-box; /* ✅ Incluye padding en el ancho */
 }
 
-/* Botón cerrar */
 .modal-close {
     position: absolute;
     top: 15px;
@@ -841,7 +623,6 @@ body::before {
     transform: rotate(90deg);
 }
 
-/* Header del modal */
 .modal-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -862,11 +643,9 @@ body::before {
     margin: 0.5rem 0;
 }
 
-/* Campos del formulario */
 .field {
     margin-bottom: 1.5rem;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .field label {
@@ -882,10 +661,9 @@ body::before {
     padding: 0.9rem 1rem;
     border: 2px solid rgba(139, 69, 19, 0.3);
     border-radius: 10px;
-    font-size: 1rem;
+    font-size: 16px;
     background: rgba(255, 255, 255, 0.8);
     transition: all 0.3s;
-    box-sizing: border-box; /* ✅ Incluye padding en el ancho */
 }
 
 .field input:focus {
@@ -895,7 +673,6 @@ body::before {
     box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
-/* Botón principal del modal */
 .modal-content .btn-primary {
     width: 100%;
     background: linear-gradient(135deg, #FFD700, #B8860B);
@@ -909,7 +686,6 @@ body::before {
     transition: all 0.3s;
     margin-top: 1rem;
     box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-    box-sizing: border-box;
 }
 
 .modal-content .btn-primary:hover {
@@ -917,34 +693,49 @@ body::before {
     box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .modal {
-        padding: 15px;
-    }
-    
-    .modal-content {
-        padding: 2rem 1.5rem;
-        max-width: 100%;
-        margin: 10px auto;
-    }
-    
-    .modal-header h2 {
-        font-size: 1.5rem;
-    }
+/* Modal comprobante */
+#modal-comp .modal-content {
+    max-width: 95vw;
+    width: 95%;
+    margin: 10px auto;
+    padding: 1.5rem 1rem;
 }
 
-@media (max-width: 480px) {
-    .modal {
-        padding: 10px;
-    }
-    
-    .modal-content {
-        padding: 1.5rem 1rem;
-    }
+.comp-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    border: 2px solid #8B4513;
+    border-radius: 10px;
+    margin: 1rem 0;
+    display: block;
 }
+
+#comp-info {
+    font-size: 0.9rem;
+    color: #5D3A1A;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+}
+
+#modal-comp h3 {
+    font-size: 1.3rem;
+    color: #5D3A1A;
+    margin-bottom: 1rem;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+#modal-comp .modal-close {
+    top: 10px;
+    right: 10px;
+    font-size: 1.8rem;
+    width: 30px;
+    height: 30px;
+}
+
 /* Datos de pago */
 .datos-pago {
     background: rgba(244, 228, 193, 0.75);
@@ -1050,189 +841,159 @@ body::before {
 }
 
 /* ============================================================
-   RESPONSIVE
+   📱 RESPONSIVE - TABLET (768px)
    ============================================================ */
 @media (max-width: 768px) {
-    .main-title {
-        font-size: 2rem;
+    /* Navegación */
+    .main-nav {
+        padding: 0.8rem 1rem;
     }
     
-    .highlight {
-        font-size: 2.5rem;
+    .nav-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .nav-brand {
+        font-size: 1.2rem;
     }
     
     .nav-links {
         width: 100%;
         justify-content: center;
+        gap: 0.3rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+        flex: 1;
+        text-align: center;
+        min-width: 0;
+    }
+    
+    /* Contenedores */
+    .main-container, .admin-container {
+        padding: 1rem;
+        width: 100%;
+    }
+    
+    .poster {
+        padding: 2rem 1rem;
+        margin: 0.5rem;
+    }
+    
+    .main-title {
+        font-size: 1.8rem;
+    }
+    
+    .highlight {
+        font-size: 2.2rem;
+    }
+    
+    .description {
+        font-size: 1rem;
+    }
+    
+    /* Tablero */
+    .board-section {
+        padding: 1.5rem 1rem;
+        margin: 1rem auto;
+        width: 98%;
+    }
+    
+    .board-header h2 {
+        font-size: 1.5rem;
     }
     
     .treasure-board {
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
         gap: 8px;
+    }
+    
+    .ticket {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+    
+    /* Admin */
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.3rem;
+        width: 100%;
+    }
+    
+    .admin-buttons {
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.5rem;
     }
     
     .stats {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
     }
-/* ============================================================
-   BOTONES DE ACCIÓN EN LA TABLA
-   ============================================================ */
-.btn-ver {
-    background: rgba(23, 162, 184, 0.85) !important;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s;
-}
-
-.btn-ver:hover {
-    background: rgba(19, 132, 150, 0.95) !important;
-    transform: scale(1.1);
-}
-
-.btn-aprobar {
-    background: rgba(40, 167, 69, 0.85) !important;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    margin-right: 5px;
-    transition: all 0.3s;
-}
-
-.btn-aprobar:hover {
-    background: rgba(32, 201, 151, 0.95) !important;
-    transform: scale(1.1);
-}
-
-.btn-eliminar {
-    background: rgba(220, 53, 69, 0.85) !important;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s;
-}
-
-.btn-eliminar:hover {
-    background: rgba(200, 35, 51, 0.95) !important;
-    transform: scale(1.1);
-}
-
-/* ============================================================
-   ENCABEZADO DEL ADMIN
-   ============================================================ */
-.admin-header h2 {
-    color: #5D3A1A;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
-    font-family: 'Cinzel', serif;
-}
-
-.back-btn {
-    background: rgba(255, 255, 255, 0.6) !important;
-    backdrop-filter: blur(5px);
-    border: 2px solid #8B4513;
-    color: #5D3A1A;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.8) !important;
-    transform: translateY(-2px);
-}
-   /* ============================================================
-   MODAL DE COMPROBANTE - RESPONSIVE PARA MÓVIL
-   ============================================================ */
-
-/* Modal de ver comprobante */
-#modal-comp .modal-content {
-    max-width: 95vw !important; /* ✅ Usa el 95% del ancho de la pantalla */
-    width: 95%;
-    margin: 10px auto;
-    padding: 1.5rem 1rem;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-/* Imagen del comprobante */
-.comp-img {
-    width: 100% !important;
-    max-width: 100%;
-    height: auto;
-    max-height: 60vh; /* ✅ Altura máxima del 60% de la pantalla */
-    object-fit: contain; /* ✅ Mantiene proporción */
-    border: 2px solid #8B4513;
-    border-radius: 10px;
-    margin: 1rem 0;
-    display: block;
-}
-
-/* Información del comprobante */
-#comp-info {
-    font-size: 0.9rem;
-    color: #5D3A1A;
-    margin-bottom: 1rem;
-    word-wrap: break-word; /* ✅ Rompe palabras largas */
-}
-
-/* Título del modal */
-#modal-comp h3 {
-    font-size: 1.3rem;
-    color: #5D3A1A;
-    margin-bottom: 1rem;
-    text-align: center;
-    word-wrap: break-word;
-}
-
-/* Botón cerrar en móvil */
-#modal-comp .modal-close {
-    top: 10px;
-    right: 10px;
-    font-size: 1.8rem;
-    width: 30px;
-    height: 30px;
-}
-
-/* ============================================================
-   MEDIA QUERIES PARA MÓVILES
-   ============================================================ */
-@media (max-width: 768px) {
-    /* Todos los modales en móvil */
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    /* Tabla */
+    .table-container {
+        margin: 0 -0.5rem;
+    }
+    
+    .admin-table {
+        font-size: 0.85rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 0.6rem 0.4rem;
+    }
+    
+    /* Modales */
     .modal {
         padding: 10px;
-        align-items: flex-start; /* ✅ Empieza desde arriba */
-        padding-top: 50px; /* ✅ Espacio desde arriba */
+        align-items: flex-start;
+        padding-top: 50px;
     }
     
     .modal-content {
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 95vw;
+        max-width: 95vw;
         margin: 0 auto;
         padding: 1.5rem 1rem;
         max-height: 85vh;
     }
     
-    /* Modal de comprobante específico */
+    .modal-header h2 {
+        font-size: 1.4rem;
+    }
+    
     #modal-comp .modal-content {
-        width: 98vw !important;
-        max-width: 98vw !important;
+        width: 98vw;
+        max-width: 98vw;
         padding: 1rem 0.8rem;
     }
     
     .comp-img {
-        max-height: 50vh; /* ✅ Más pequeño en móviles */
-        width: 100%;
+        max-height: 50vh;
     }
     
     #modal-comp h3 {
@@ -1242,19 +1003,75 @@ body::before {
     #comp-info {
         font-size: 0.85rem;
     }
+    
+    /* Botones táctiles */
+    button, .btn, .nav-btn, .ticket {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .btn-eliminar, .btn-aprobar, .btn-ver {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
 }
 
+/* ============================================================
+    RESPONSIVE - MÓVIL PEQUEÑO (480px)
+   ============================================================ */
 @media (max-width: 480px) {
-    /* Pantallas muy pequeñas */
+    .nav-brand {
+        font-size: 1rem;
+    }
+    
+    .nav-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .poster {
+        padding: 1.5rem 0.8rem;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+    }
+    
+    .highlight {
+        font-size: 1.8rem;
+    }
+    
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .treasure-board {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 6px;
+    }
+    
+    .ticket {
+        font-size: 0.9rem;
+    }
+    
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
     .modal {
         padding: 5px;
         padding-top: 40px;
     }
     
     .modal-content {
-        width: 98vw !important;
-        max-width: 98vw !important;
-        padding: 1rem 0.7rem;
+        width: 98vw;
+        max-width: 98vw;
+        padding: 1.2rem 0.8rem;
         border-radius: 12px;
     }
     
@@ -1270,17 +1087,8 @@ body::before {
     #comp-num {
         font-size: 0.9rem;
     }
-}
-
-/* ============================================================
-   PREVENIR SCROLL HORIZONTAL
-   ============================================================ */
-body {
-    overflow-x: hidden;
-    max-width: 100vw;
-}
-
-* {
-    box-sizing: border-box;
-}
+    
+    .field input {
+        padding: 0.8rem;
+    }
 }
