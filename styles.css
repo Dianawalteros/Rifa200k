@@ -9,8 +9,8 @@
 
 html {
     font-size: 16px;
-    -webkit-text-size-adjust: 50%;
-    -ms-text-size-adjust: 50%;
+    -webkit-text-size-adjust: 80%;
+    -ms-text-size-adjust: 80%;
     touch-action: manipulation;
 }
 
